@@ -19,6 +19,7 @@ public class Root  {
         SystemTrayIcon.createIcon();
 
         // Каждые 4 часа будем слать письмо, для проверки, что все работает
+        //test
         Timer mailTimer = new Timer ();
         TimerTask fourHourlyTask = new TimerTask () {
             @Override
