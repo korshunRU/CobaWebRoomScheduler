@@ -1,0 +1,23 @@
+<component name="ArtifactManager">
+  <artifact name="CobaWebRoomScheduler:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/CobaWebRoomScheduler_jar</output-path>
+    <root id="root">
+      <element id="archive" name="CobaWebRoomScheduler.jar">
+        <element id="module-output" name="CobaWebRoomScheduler" />
+      </element>
+      <element id="directory" name="lib">
+        <element id="file-copy" path="$PROJECT_DIR$/lib/commons-lang-2.6.jar" />
+        <element id="file-copy" path="$PROJECT_DIR$/lib/commons-lang3-3.3.2.jar" />
+        <element id="file-copy" path="$PROJECT_DIR$/lib/commons-logging-1.1.1.jar" />
+        <element id="file-copy" path="$PROJECT_DIR$/lib/hsqldb.jar" />
+        <element id="file-copy" path="$PROJECT_DIR$/lib/jackcess-2.0.8.jar" />
+        <element id="file-copy" path="$PROJECT_DIR$/lib/javax.mail.jar" />
+        <element id="file-copy" path="$PROJECT_DIR$/lib/mysql-connector-java-5.0.8-bin.jar" />
+        <element id="file-copy" path="$PROJECT_DIR$/lib/ucanaccess-2.0.9.3.jar" />
+      </element>
+      <element id="directory" name="res">
+        <element id="dir-copy" path="$PROJECT_DIR$/res" />
+      </element>
+    </root>
+  </artifact>
+</component>

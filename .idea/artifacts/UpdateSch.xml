@@ -1,0 +1,26 @@
+<component name="ArtifactManager">
+  <artifact name="UpdateSch">
+    <output-path>$PROJECT_DIR$/out/artifacts/UpdateSch</output-path>
+    <root id="root">
+      <element id="directory" name="lib">
+        <element id="library" level="project" name="commons-lang-2.6" />
+        <element id="library" level="project" name="commons-lang3-3.3.2" />
+        <element id="library" level="project" name="commons-logging-1.1.1" />
+        <element id="library" level="project" name="hsqldb" />
+        <element id="library" level="project" name="jackcess-2.0.8" />
+        <element id="library" level="project" name="javax.mail" />
+        <element id="library" level="project" name="mysql-connector-java-5.0.8-bin" />
+        <element id="library" level="project" name="ucanaccess-2.0.9.3" />
+      </element>
+      <element id="directory" name="res">
+        <element id="dir-copy" path="$PROJECT_DIR$/res" />
+      </element>
+      <element id="archive" name="UpdateSch.jar">
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+        </element>
+        <element id="module-output" name="CobaWebRoomScheduler" />
+      </element>
+    </root>
+  </artifact>
+</component>
