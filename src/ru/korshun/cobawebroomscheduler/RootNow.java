@@ -1,6 +1,6 @@
 package ru.korshun.cobawebroomscheduler;
 
-import java.net.URL;
+
 import java.sql.*;
 import java.text.ParseException;
 
@@ -19,26 +19,25 @@ public class RootNow  {
     /**
      *      Получаем данные из БД access и обновляем БД mysql
      */
-    private static void updateDB() {
+    protected static void updateDB() {
+//        System.out.println("updateDB");
         Connection connAccess = null, connMysql = null;
 
         try {
-
-//            System.out.println("jdbc:ucanaccess://" + Config.PATH + Config.A_DATABASE_NAME);
 
             // Соединяемся с Access
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
             connAccess = DriverManager.getConnection("jdbc:ucanaccess://" + Config.PATH + Config.A_DATABASE_NAME);
 
-//            System.out.println("jdbc:ucanaccess://" + Config.PATH + Config.A_DATABASE_NAME);
+
 
 
 
             // ========================================================================================================================
             // Выбираем клиентов
             String queryClient = "SELECT ID, Cl_Type, Cl_Name, Cl_Address, Cl_Phone FROM cabclient";
-            PreparedStatement stmtAccessClient = connAccess.prepareStatement(queryClient);
-            ResultSet rsAccessClient = stmtAccessClient.executeQuery();
+            PreparedStatement stmtAccess_Client = connAccess.prepareStatement(queryClient);
+            ResultSet rsAccessClient = stmtAccess_Client.executeQuery();
 
             while (rsAccessClient.next()) {
 
@@ -50,29 +49,25 @@ public class RootNow  {
                 PreparedStatement stmtMysql;
 
                 // Обновляем информацию по клиентам
-                String updateClient = "UPDATE " + Config.DB_TABLE_PREFIX + "users " +
+                String updateClient =   "UPDATE " + Config.DB_TABLE_PREFIX + "users " +
                         "SET name = ?," +
-                        "id = LAST_INSERT_ID(id)," +
                         "address = ?," +
+                        "id = LAST_INSERT_ID(id)," +
                         "type = ?," +
                         "phone = ? " +
                         "WHERE id_coba = ?";
 
                 stmtMysql = Sql.getInstance().getConnection().prepareStatement(updateClient);
 
-                stmtMysql.setString(1, Functions.encodeStr(rsAccessClient.getString("Cl_Name")));
+                stmtMysql.setString(1,  Functions.encodeStr(rsAccessClient.getString("Cl_Name")));
                 Sql.getInstance().checkNullValue(2, rsAccessClient.getString("Cl_Address"), stmtMysql, true);
-                stmtMysql.setInt(3, rsAccessClient.getInt("Cl_Type"));
+                stmtMysql.setInt(3,     rsAccessClient.getInt("Cl_Type"));
                 Sql.getInstance().checkNullValue(4, rsAccessClient.getString("Cl_Phone"), stmtMysql, true);
-                stmtMysql.setInt(5, rsAccessClient.getInt("ID"));
+                stmtMysql.setInt(5,     rsAccessClient.getInt("ID"));
 
                 stmtMysql.executeUpdate();
 
-                // Последний заюзанный ID клиента
 //                System.out.println(Sql.getInstance().getLastId(stmtMysql));
-//                int lastClientId = Sql.getInstance().getLastId(stmtMysql);
-
-
 
 
 
@@ -94,7 +89,7 @@ public class RootNow  {
                     ResultSet rsAccessObject = stmtAccessObject.executeQuery();
 
                     while (rsAccessObject.next()) {
-//                    System.out.println(rsAccessObject.getString("Ob_ID"));
+
 
                         // Разбиваем АП
                         String ap[] = rsAccessObject.getString("Ob_Pay").split("~");
@@ -140,7 +135,7 @@ public class RootNow  {
                                 "sms_alarm = ?," +
                                 "schedule = ?," +
                                 "chk = 1," +
-                                "id = LAST_INSERT_ID(id)";
+                                "id=LAST_INSERT_ID(id)";
 
                         stmtMysql = Sql.getInstance().getConnection().prepareStatement(updateObject);
 
@@ -167,7 +162,7 @@ public class RootNow  {
                         stmtMysql.executeUpdate();
 
 
-                        // Последний заюзанный ID обьекта
+                        // Последний заюзанный ID
                         int lastObjectId = Sql.getInstance().getLastId(stmtMysql);
 
 
@@ -335,9 +330,9 @@ public class RootNow  {
             connMysql.commit();
             Sql.getInstance().disconnectionFromSql(connMysql);
 
-            System.out.println("Complite!");
+//            System.out.println("Complite!");
 
-//            Root.sendMail("Complite!");
+            Root.sendMail(true);
 
         } catch (ClassNotFoundException | SQLException | ParseException e) {
             try {
@@ -349,7 +344,7 @@ public class RootNow  {
                 e1.printStackTrace();
             }
             e.printStackTrace();
-        }  finally {
+        } finally {
             if(connAccess != null) {
                 try {
                     connAccess.close();
