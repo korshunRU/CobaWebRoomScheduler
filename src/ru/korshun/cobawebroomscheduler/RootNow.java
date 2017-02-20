@@ -9,6 +9,8 @@ public class RootNow  {
 
     public static void main(String[] args) {
 
+        System.out.println("NOW!");
+
         RootNow.updateDB();
 
     }
@@ -67,7 +69,7 @@ public class RootNow  {
 
                 stmtMysql.executeUpdate();
 
-//                System.out.println(Sql.getInstance().getLastId(stmtMysql));
+                System.out.println(Sql.getInstance().getLastId(stmtMysql));
 
 
 
@@ -92,7 +94,9 @@ public class RootNow  {
 
 
                         // Разбиваем АП
-                        String ap[] = rsAccessObject.getString("Ob_Pay").split("~");
+                        String ob_pay = rsAccessObject.getString("Ob_Pay") == null ? "0" : rsAccessObject.getString("Ob_Pay");
+
+                        String ap[] = ob_pay.split("~");
                         String apStr = ap.length > 1 ?
                                 "Охранная сигнализация - " + ap[0] + ", пожарная сигнализация - " + ap[1] :
                                 "Охранная сигнализация - " + ap[0];
@@ -220,13 +224,19 @@ public class RootNow  {
                                 "WHERE S_Num = ? AND S_Date=(Date()-1)";
                         PreparedStatement stmtAccessEvents = connAccess.prepareStatement(queryEvents);
 
-                        stmtAccessEvents.setInt(1, rsAccessObject.getInt("Ob_Num"));
+                        int number = rsAccessObject.getInt("Ob_Num");
+
+                        stmtAccessEvents.setInt(1, number);
 
                         ResultSet rsAccessEvents = stmtAccessEvents.executeQuery();
 
                         while (rsAccessEvents.next()) {
 
-//                        System.out.println(rsAccessEvents.getString("S_Num") + " - " + rsAccessEvents.getString("S_Date") + " - " + rsAccessEvents.getString("S_Time"));
+                            String event = Functions.parseStringToSqlDateFormat(
+                                    rsAccessEvents.getString("S_Date") + " " +
+                                            rsAccessEvents.getString("S_Time"), "yyyy-MM-dd HH:mm:ss");
+
+                            System.out.println(number + ": " + event);
                             // Добавляем сигналы
                             String updateEvents = "INSERT INTO " + Config.DB_TABLE_PREFIX + "events " +
                                     "SET id_object = ?," +
@@ -236,9 +246,7 @@ public class RootNow  {
                             stmtMysql = Sql.getInstance().getConnection().prepareStatement(updateEvents);
 
                             stmtMysql.setInt(1, lastObjectId);
-                            stmtMysql.setString(2, Functions.parseStringToSqlDateFormat(
-                                    rsAccessEvents.getString("S_Date") + " " +
-                                            rsAccessEvents.getString("S_Time"), "yyyy-MM-dd HH:mm:ss"));
+                            stmtMysql.setString(2, event);
                             stmtMysql.setString(3, rsAccessEvents.getString("S_Descr"));
 
                             stmtMysql.executeUpdate();

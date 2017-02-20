@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact name="UpdateSch">
+  <artifact build-on-make="true" name="UpdateSch">
     <output-path>$PROJECT_DIR$/out/artifacts/UpdateSch</output-path>
     <root id="root">
       <element id="directory" name="lib">

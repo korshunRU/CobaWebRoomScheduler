@@ -19,7 +19,7 @@ public class Root  {
         SystemTrayIcon.createIcon();
 
         // Каждые 4 часа будем слать письмо, для проверки, что все работает
-        Timer mailTimer = new Timer ();
+        Timer mailTimer = new Timer();
         TimerTask fourHourlyTask = new TimerTask () {
             @Override
             public void run () {
@@ -98,7 +98,7 @@ public class Root  {
 
         } catch (MessagingException | UnsupportedEncodingException e) {
 //            e.printStackTrace();
-            System.out.println(Functions.getDateTime("dd.MM.yyyy HH:mm:ss") + ": RUN!");
+            System.out.println(Functions.getDateTime("dd.MM.yyyy HH:mm:ss") + ": RUN schedule!");
         }
 
 
@@ -190,7 +190,9 @@ class MyTimerTask
 
 
                         // Разбиваем АП
-                        String ap[] = rsAccessObject.getString("Ob_Pay").split("~");
+                        String ob_pay = rsAccessObject.getString("Ob_Pay") == null ? "0" : rsAccessObject.getString("Ob_Pay");
+
+                        String ap[] = ob_pay.split("~");
                         String apStr = ap.length > 1 ?
                                 "Охранная сигнализация - " + ap[0] + ", пожарная сигнализация - " + ap[1] :
                                 "Охранная сигнализация - " + ap[0];
@@ -318,12 +320,19 @@ class MyTimerTask
                                 "WHERE S_Num = ? AND S_Date=(Date()-1)";
                         PreparedStatement stmtAccessEvents = connAccess.prepareStatement(queryEvents);
 
-                        stmtAccessEvents.setInt(1, rsAccessObject.getInt("Ob_Num"));
+                        int number = rsAccessObject.getInt("Ob_Num");
+
+                        stmtAccessEvents.setInt(1, number);
 
                         ResultSet rsAccessEvents = stmtAccessEvents.executeQuery();
 
                         while (rsAccessEvents.next()) {
 
+                            String event = Functions.parseStringToSqlDateFormat(
+                                    rsAccessEvents.getString("S_Date") + " " +
+                                            rsAccessEvents.getString("S_Time"), "yyyy-MM-dd HH:mm:ss");
+
+                            System.out.println(event);
 //                        System.out.println(rsAccessEvents.getString("S_Num") + " - " + rsAccessEvents.getString("S_Date") + " - " + rsAccessEvents.getString("S_Time"));
                             // Добавляем сигналы
                             String updateEvents = "INSERT INTO " + Config.DB_TABLE_PREFIX + "events " +
@@ -334,9 +343,7 @@ class MyTimerTask
                             stmtMysql = Sql.getInstance().getConnection().prepareStatement(updateEvents);
 
                             stmtMysql.setInt(1, lastObjectId);
-                            stmtMysql.setString(2, Functions.parseStringToSqlDateFormat(
-                                    rsAccessEvents.getString("S_Date") + " " +
-                                            rsAccessEvents.getString("S_Time"), "yyyy-MM-dd HH:mm:ss"));
+                            stmtMysql.setString(2, event);
                             stmtMysql.setString(3, rsAccessEvents.getString("S_Descr"));
 
                             stmtMysql.executeUpdate();
@@ -396,7 +403,7 @@ class MyTimerTask
 
 
             // ===============================================================================================================
-            // Удаляем те объекты, которые остались с нулем в поле chk - таких объектов быть не должно
+            // Удаляем контакты, которые остались с нулем в поле chk - таких объектов быть не должно
             String deleteAgents =   "DELETE FROM " + Config.DB_TABLE_PREFIX + "agents " +
                     "WHERE chk = 0";
             stmtMysql = Sql.getInstance().getConnection().prepareStatement(deleteAgents);
