@@ -189,6 +189,7 @@ class MyTimerTask
                     while (rsAccessObject.next()) {
 
 
+
                         // Разбиваем АП
                         String ob_pay = rsAccessObject.getString("Ob_Pay") == null ? "0" : rsAccessObject.getString("Ob_Pay");
 

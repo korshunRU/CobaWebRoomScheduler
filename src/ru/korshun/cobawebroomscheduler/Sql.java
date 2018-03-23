@@ -1,5 +1,6 @@
 package ru.korshun.cobawebroomscheduler;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 
 public class Sql {
@@ -11,8 +12,9 @@ public class Sql {
 
     private Sql() {
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            Class.forName("com.mysql.jdbc.Driver").getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException |
+                NoSuchMethodException | InvocationTargetException e) {
             setConnected(false);
         }
     }

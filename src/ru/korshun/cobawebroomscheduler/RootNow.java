@@ -93,9 +93,14 @@ public class RootNow  {
                     while (rsAccessObject.next()) {
 
 
+//                        System.out.println(rsAccessObject.getString("Ob_Pay"));
+//                        System.out.println(rsAccessObject.getString("Ob_Phone"));
+
+                        String ob_phone = rsAccessObject.getString("Ob_Phone") == null ? "" : rsAccessObject.getString("Ob_Phone");
+
+
                         // Разбиваем АП
                         String ob_pay = rsAccessObject.getString("Ob_Pay") == null ? "0" : rsAccessObject.getString("Ob_Pay");
-
                         String ap[] = ob_pay.split("~");
                         String apStr = ap.length > 1 ?
                                 "Охранная сигнализация - " + ap[0] + ", пожарная сигнализация - " + ap[1] :
@@ -150,7 +155,7 @@ public class RootNow  {
                         stmtMysql.setString(5, Functions.encodeStr(rsAccessObject.getString("Ob_Address")));
                         stmtMysql.setInt(6, rsAccessObject.getString("Ob_State").equals("Охрана") ? 1 : 2);
                         stmtMysql.setString(7, Functions.encodeStr(apStr));
-                        Sql.getInstance().checkNullValue(8, rsAccessObject.getString("Ob_Phone").trim(), stmtMysql, true);
+                        Sql.getInstance().checkNullValue(8, ob_phone.trim(), stmtMysql, true);
                         Sql.getInstance().checkNullValue(9, smsStr, stmtMysql, true);
                         Sql.getInstance().checkNullValue(10, sch, stmtMysql, true);
 
@@ -159,7 +164,7 @@ public class RootNow  {
                         stmtMysql.setString(13, Functions.encodeStr(rsAccessObject.getString("Ob_Address")));
                         stmtMysql.setInt(14, rsAccessObject.getString("Ob_State").equals("Охрана") ? 1 : 2);
                         stmtMysql.setString(15, Functions.encodeStr(apStr));
-                        Sql.getInstance().checkNullValue(16, rsAccessObject.getString("Ob_Phone").trim(), stmtMysql, true);
+                        Sql.getInstance().checkNullValue(16, ob_phone.trim(), stmtMysql, true);
                         Sql.getInstance().checkNullValue(17, smsStr, stmtMysql, true);
                         Sql.getInstance().checkNullValue(18, sch, stmtMysql, true);
 

@@ -3,6 +3,7 @@ package ru.korshun.cobawebroomscheduler;
 import javafx.application.Platform;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
@@ -25,12 +26,19 @@ public final class SystemTrayIcon {
 
             Image image = Toolkit.getDefaultToolkit().getImage("res/tray.png");
 
-            final ActionListener closeListener = e -> {
+//            final ActionListener closeListener = e -> {
+//
+//                Platform.exit();
+//                System.exit(0);
+//            };
 
-                Platform.exit();
-                System.exit(0);
+            final ActionListener closeListener = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Platform.exit();
+                    System.exit(0);
+                }
             };
-
 
             // create a popup menu
             PopupMenu popup = new PopupMenu();

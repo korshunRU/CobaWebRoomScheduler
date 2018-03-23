@@ -3,9 +3,6 @@ package ru.korshun.cobawebroomscheduler;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/**
- * Created by user on 19.01.2015.
- */
 public final class Config {
 
 
