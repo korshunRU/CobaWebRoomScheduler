@@ -165,7 +165,7 @@ class MyTimerTask
 
                 stmtMysql.executeUpdate();
 
-//                System.out.println(Sql.getInstance().getLastId(stmtMysql));
+                System.out.println(Sql.getInstance().getLastId(stmtMysql));
 
 
 
